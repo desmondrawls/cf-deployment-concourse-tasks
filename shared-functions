@@ -3,7 +3,15 @@
 check_bbl_input_params() {
   set +x
   # Checks that we have IaaS credentials for either GCP or AWS
-  if [ ! -z "${BBL_GCP_SERVICE_ACCOUNT_KEY}" ] || [ ! -z "${BBL_AWS_ACCESS_KEY_ID}" -a ! -z "${BBL_AWS_SECRET_ACCESS_KEY}" ]; then
+  if    [ -n "${BBL_GCP_SERVICE_ACCOUNT_KEY}" ] \
+     || [ -n "${BBL_AWS_ACCESS_KEY_ID}" \
+          -a -n "${BBL_AWS_SECRET_ACCESS_KEY}" ] \
+     || [ -n "${BBL_AZURE_SUBSCRIPTION_ID}" \
+          -a -n "${BBL_AZURE_TENANT_ID}" \
+          -a -n "${BBL_AZURE_CLIENT_ID}" \
+          -a -n "${BBL_AZURE_CLIENT_SECRET}" \
+          -a -n "${BBL_AZURE_REGION}" ]
+  then
     return 0
   else
     echo 'The BBL task must be configured with IaaS credentials. Please configure either `BBL_GCP_SERVICE_ACCOUNT_KEY`, or the `BBL_AWS_ACCESS_KEY_ID` `BBL_AWS_SECRET_ACCESS_KEY` pair.'
